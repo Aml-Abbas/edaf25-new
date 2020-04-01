@@ -18,18 +18,37 @@ public class WordGraph implements Graph<String> {
   private final Map<String, Set<String>> graph = new HashMap<>();
 
   public WordGraph(Path wordfile, WordCriteria criteria) throws IOException {
-    // TODO(D1): load all words from file (wordfile).
-    // TODO(D3): compute word neighbours (according to criteria).
+    try (
+            Reader in = Files.newBufferedReader(wordfile);
+            Scanner scan = new Scanner(in)) {
+      while (scan.hasNext()) {
+        String word = scan.nextLine();
+        graph.put(word, new HashSet<String>());
+      }
+    }
+
+    for (String str:graph.keySet()){
+     for (String s: graph.keySet()){
+       if(criteria.adjacent(str,s)){
+         Set<String> newSet= graph.get(s);
+         newSet.add(str);
+         graph.put(s,newSet);
+       }
+     }
+    }
+
   }
 
   @Override public int vertexCount() {
-    // TODO(D1): implement this!
-    return 0;
+    return graph.size();
   }
 
   @Override public Collection<String> vertexSet() {
-    // TODO(D1): implement this!
-    return Collections.emptySet();
+    Set<String> set= new HashSet<>();
+    for(String s: graph.keySet()){
+      set.add(s);
+    }
+    return set;
   }
 
   @Override public Collection<String> neighbours(String v) {
