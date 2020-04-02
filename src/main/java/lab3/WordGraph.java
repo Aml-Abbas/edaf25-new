@@ -30,9 +30,7 @@ public class WordGraph implements Graph<String> {
     for (String str:graph.keySet()){
      for (String s: graph.keySet()){
        if(criteria.adjacent(str,s)){
-         Set<String> newSet= graph.get(s);
-         newSet.add(str);
-         graph.put(s,newSet);
+         graph.get(s).add(str);
        }
      }
     }
@@ -44,11 +42,7 @@ public class WordGraph implements Graph<String> {
   }
 
   @Override public Collection<String> vertexSet() {
-    Set<String> set= new HashSet<>();
-    for(String s: graph.keySet()){
-      set.add(s);
-    }
-    return set;
+    return graph.keySet();
   }
 
   @Override public Collection<String> neighbours(String v) {
